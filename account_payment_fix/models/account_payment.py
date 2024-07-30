@@ -220,6 +220,7 @@ class AccountPayment(models.Model):
                 self.partner_type = False
             # limpiamos journal ya que podria no estar disponible para la nueva
             # operacion y ademas para que se limpien los payment methods
+            _logger.info("ONCHANGE PAYMENT TYPE")
             self.journal_id = False
         # # Set payment method domain
         # res = self._onchange_journal()
@@ -260,6 +261,7 @@ class AccountPayment(models.Model):
         cuando el importe sea cero, imagino que para hacer ajustes por
         diferencias de cambio
         """
+        _logger.info("ONCHANGE JOURNAL")
         if self.journal_id:
 
             #La numeración se recrea en la validación ya que puede ser erronea si hay mas de una fila por journla
@@ -327,7 +329,7 @@ class AccountPayment(models.Model):
         for rec in self:
             if rec.journal_id:
                 if not rec.reconciled_bill_ids:
-                    rec.move_id.journal_id = rec.journal_id.id
+                    #rec.move_id.journal_id = rec.journal_id.id
                     last_sequence = rec.move_id._get_last_sequence()
                     new = not last_sequence
                     if new:
